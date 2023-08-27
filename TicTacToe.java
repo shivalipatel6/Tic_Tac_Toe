@@ -30,12 +30,44 @@ public class TicTacToe {
         System.out.println();
         System.out.println();
 
-
     }// end gameBoardPrint
 
 
+/**
+     *  Takes in user input and translates it into array positions.
+     * returns null if inputs are out of array.
+     * move - movement directions from player inputted at the beginning of the turn.
+     * int[] - int array with the translated coordinates for the gameboard.
+     */
+    public static int[] TranslateMove(String move) {
+        if (move.length() != 2) return null;
+        // incorrect input
+        int position[] = new int[2];
+        String[] strPos = move.split("");
+            
+            switch (strPos[0]) {
+            case "a": position[1] = 0;
+            break;
+            case "b": position[1] = 1;
+            break;
+            case "c": position[1] = 2;
+            break;
+             // returns null for any other type of value
+            default: return null;
+            }// end first switch case
+            switch (strPos[1]) {
+                case "1": position[0] = 2;
+                break;
+                case "2": position[0] = 1;
+                break;
+                case "3": position[0] = 0;
+                break;
+                // returns null for any other type of value
+                default: return null;
+            }// end second switch case   
 
-    
+        return position;
+    }// end TranslateMove
 
 
      public static void main(String args[]) {
@@ -44,6 +76,12 @@ public class TicTacToe {
         // game board is set fully null because there are no "peices" in it until the first move it made
         gameBoardPrint(gameBoard);
         sc.close();
+        boolean turn = true;
+        boolean gameOver = false;
+        int validity = 1;
 
+
+
+        
      }// end main
 }// end class TicTacToe
