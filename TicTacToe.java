@@ -17,7 +17,7 @@ public class TicTacToe {
                     System.out.print("__ ");
                 }
                 else{
-                System.out.print(gameBoard[i][j]);
+                System.out.print(" " +gameBoard[i][j] + " ");
                 }// there is a peice on the board
             }// end inner for (the row)
             System.out.print(" " + boardNum);
@@ -70,18 +70,95 @@ public class TicTacToe {
     }// end TranslateMove
 
 
+    public static int MakeMove(String[][] gameBoard, boolean turn, String input, int drawOffered) {
+    // method returns turnCondition at the end if inputs are valid
+    int turnCondition = 1;
+    if (input.equals("resign")) {
+        if (turn) System.out.println("O's wins");
+        else System.out.println("X's wins");
+        return 2;
+    }// resign condition
+
+    if (input.equals("draw") && drawOffered > 3) return 2;
+    if (input.equals("draw") && drawOffered <= 3) return 0;
+    if (input.equals("draw?")) {
+        turnCondition = 4;
+    }//  Starting a draw
+
+    if(input.length() == 2){
+    int placePiece[] = TranslateMove(input);
+    if (placePiece == null) return 0;
+        if(gameBoard[placePiece[0]][placePiece[1]] == null){
+            if(turn){
+                gameBoard[placePiece[0]][placePiece[1]] = "X";
+            }// X's turn, place an X
+            else{
+                gameBoard[placePiece[0]][placePiece[1]] = "O";
+
+            }// O's turn, place an O
+        }
+        else{
+        turnCondition = 0;
+        }// repeat answer
+    }
+    else{
+        turnCondition = 0;
+    }
+   
+
+
+
+
+   // either returns 1 (regular turn) or 2 (draw offered)
+   return turnCondition;
+    }//end MakeMove
+
+
+
      public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
         String[][] gameBoard = new String[3][3];
         // game board is set fully null because there are no "peices" in it until the first move it made
-        gameBoardPrint(gameBoard);
-        sc.close();
+
+
         boolean turn = true;
+            // true = X's and false = O's 
         boolean gameOver = false;
         int validity = 1;
+        while (!gameOver) {
+             gameBoardPrint(gameBoard);
+            if (turn) {
+                System.out.print("X's move: ");
+                String xMove = sc.nextLine();
+                validity = MakeMove(gameBoard, turn, xMove, validity);
+                while (validity == 0) {
+                    System.out.println("Illegal move, try again");
+                    System.out.print("X's move: ");
+                    xMove = sc.nextLine();
+                    validity = MakeMove(gameBoard, turn, xMove, validity);
+                }
+                turnNum = turnNum + 1;
+                turn = false;
+            }// X's turn
+            else{
+                    System.out.print("O's move: ");
+                    String oMove = sc.nextLine();
+                    validity = MakeMove(gameBoard, turn, oMove, validity);
+    
+                    // checks validity of move and switches turn if valid
+                    while (validity == 0) {
+                        System.out.println("Illegal move, try again");
+                        System.out.print("O's move: ");
+                        oMove = sc.nextLine();
+                        validity = MakeMove(gameBoard, turn, oMove, validity);
+                    }
+                    turnNum = turnNum +1; 
+                    turn = true;
+                }// O's move
+                if (validity == 2) gameOver = true;
 
+        }// end game play
 
-
-        
+        sc.close();
      }// end main
 }// end class TicTacToe
