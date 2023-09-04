@@ -1,7 +1,14 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class TicTacToe {
     public static int turnNum = 1; 
+    public static int XWins = 0;
+    public static int OWins = 0;
+    public static int Ties = 0;
 
 
  /** Prints out the state of the gameboard after each successful move
@@ -74,8 +81,14 @@ public class TicTacToe {
     // method returns turnCondition at the end if inputs are valid
     int turnCondition = 1;
     if (input.equals("resign")) {
-        if (turn) System.out.println("O's wins");
-        else System.out.println("X's wins");
+        if (turn){
+            System.out.println("O's wins");
+            OWins++;
+        } 
+        else{
+             System.out.println("X's wins");
+             XWins++;
+        }
         return 2;
     }// resign condition
 
@@ -124,6 +137,7 @@ if(input.length() == 2){
             if(gameBoard[i][0].equals("X") && gameBoard[i][1].equals("X") && gameBoard[i][2].equals("X") ){
                 gameBoardPrint(gameBoard);
                 System.out.println("X Wins!");
+                XWins++;
                 return 2;
             }// row win condition
              }// checking for null values before comparison
@@ -135,6 +149,7 @@ if(input.length() == 2){
             if(gameBoard[0][i].equals("X") && gameBoard[1][i].equals("X") && gameBoard[2][i].equals("X") ){
                 gameBoardPrint(gameBoard);
                 System.out.println("X Wins!");
+                XWins++;
                 return 2;
             }// column win condition
             }// checking for null values
@@ -145,6 +160,7 @@ if(input.length() == 2){
         if(gameBoard[0][0].equals("X") && gameBoard[1][1].equals("X") && gameBoard[2][2].equals("X") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("X Wins!");
+                XWins++;
                 return 2;
             }// diagonal win condition
         }// checking for null values
@@ -153,6 +169,7 @@ if(input.length() == 2){
             if(gameBoard[2][0].equals("X") && gameBoard[1][1].equals("X") && gameBoard[0][2].equals("X") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("X Wins!");
+                XWins++;
                 return 2;
             }// diagonal win condition
         }// checking for null values.
@@ -165,6 +182,7 @@ if(input.length() == 2){
             if(gameBoard[i][0].equals("O") && gameBoard[i][1].equals("O") && gameBoard[i][2].equals("O") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("O Wins!");
+                OWins++;
                 return 2;
             }// row win condition
           }// loop through the rows checking for a row win for O
@@ -175,6 +193,7 @@ if(input.length() == 2){
             if(gameBoard[0][i].equals("O") && gameBoard[1][i].equals("O") && gameBoard[2][i].equals("O") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("O Wins!");
+                OWins++;
                 return 2;
             }// coulmn win condition
             }// checking for null values
@@ -184,6 +203,7 @@ if(input.length() == 2){
         if(gameBoard[0][0].equals("O") && gameBoard[1][1].equals("O") && gameBoard[2][2].equals("O") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("O Wins!");
+                OWins++;
                 return 2;
             }// diagonal win condition
         }// checking for null values
@@ -192,6 +212,7 @@ if(input.length() == 2){
             if(gameBoard[2][0].equals("O") && gameBoard[1][1].equals("O") && gameBoard[0][2].equals("O") ){
                  gameBoardPrint(gameBoard);
                 System.out.println("O Wins!");
+                OWins++;
                 return 2;
             }// diagonal win condition
         }// checking for null values
@@ -209,6 +230,7 @@ if(input.length() == 2){
 if(turnNum == 9 ){
         gameBoardPrint(gameBoard);
         System.out.println("Tie");
+        Ties++;
         turnCondition = 2;
 }// goes into here if the turnNum is 9 and there isn't a win condition. returns 2.
 
@@ -220,6 +242,23 @@ if(turnNum == 9 ){
 
 
      public static void main(String args[]) {
+        try{        
+            Scanner scn = new Scanner(new File("../Tic_Tac_Toe/data/gamedata.txt"));
+            if(!scn.hasNext()) {
+                System.out.println("File Empty");
+                scn.close();
+                return;
+            }// scanner is empty
+            XWins = Integer.parseInt(scn.nextLine());
+            OWins = Integer.parseInt(scn.nextLine());
+            Ties = Integer.parseInt(scn.nextLine());
+            scn.close();
+        }catch (FileNotFoundException e) {
+            System.out.println("Error: Missing File");
+        }
+// loading in previous game staticstics from other games. 
+
+
         Scanner sc = new Scanner(System.in);
         String[][] gameBoard = new String[3][3];
         // game board is set fully null because there are no "peices" in it until the first move it made
@@ -262,6 +301,19 @@ if(turnNum == 9 ){
                 if (validity == 2) gameOver = true;
 
         }// end game play
+        System.out.println("Game Stats:");
+        System.out.print("X Wins:" + XWins );
+        System.out.print("  O Wins:" + OWins );
+        System.out.print("  Ties:" + Ties );
+        
+        try {
+            FileWriter fw = new FileWriter("../Tic_Tac_Toe/data/gamedata.txt");
+            String returnString = XWins + "\n" + OWins + "\n" + Ties;
+            fw.write(returnString);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Error: Missing File");
+        }
 
         sc.close();
      }// end main
