@@ -70,7 +70,7 @@ public class TicTacToe {
     }// end TranslateMove
 
 
-    public static int MakeMove(String[][] gameBoard, boolean turn, String input, int drawOffered) {
+    public static int MakeMove(String[][] gameBoard, boolean turn, String input) {
     // method returns turnCondition at the end if inputs are valid
     int turnCondition = 1;
     if (input.equals("resign")) {
@@ -79,12 +79,8 @@ public class TicTacToe {
         return 2;
     }// resign condition
 
-    if (input.equals("draw") && drawOffered > 3) return 2;
-    if (input.equals("draw") && drawOffered <= 3) return 0;
-    if (input.equals("draw?")) {
-        turnCondition = 4;
-    }//  Starting a draw
 
+    if(turnNum < 5){
     if(input.length() == 2){
     int placePiece[] = TranslateMove(input);
     if (placePiece == null) return 0;
@@ -104,9 +100,116 @@ public class TicTacToe {
     else{
         turnCondition = 0;
     }
-   
+}// this is before any win condition is possible
+else if(turnNum <= 9){
+if(input.length() == 2){
+    int placePiece[] = TranslateMove(input);
+    if (placePiece == null) return 0;
+        if(gameBoard[placePiece[0]][placePiece[1]] == null){
+            if(turn){
+                gameBoard[placePiece[0]][placePiece[1]] = "X";
+            }// X's turn, place an X
+            else{
+                gameBoard[placePiece[0]][placePiece[1]] = "O";
+
+            }// O's turn, place an O
+        }
+        else{
+        return 0;
+        }// repeat answer
+
+        if(turn){
+          for(int i = 0; i < gameBoard.length; i++){
+            if(gameBoard[i][0] != null && gameBoard[i][1] != null && gameBoard[i][2] != null){
+            if(gameBoard[i][0].equals("X") && gameBoard[i][1].equals("X") && gameBoard[i][2].equals("X") ){
+                gameBoardPrint(gameBoard);
+                System.out.println("X Wins!");
+                return 2;
+            }// row win condition
+             }// checking for null values before comparison
+          }// loop through the rows checking for a row win for X
+       
+            
+            for(int i = 0; i < gameBoard.length; i++){
+            if(gameBoard[0][i] != null && gameBoard[1][i] != null && gameBoard[2][i] != null){    
+            if(gameBoard[0][i].equals("X") && gameBoard[1][i].equals("X") && gameBoard[2][i].equals("X") ){
+                gameBoardPrint(gameBoard);
+                System.out.println("X Wins!");
+                return 2;
+            }// column win condition
+            }// checking for null values
+          }// loop through the columns checking for a row win for X
+        
+
+        if(gameBoard[0][0] != null && gameBoard[1][1] != null && gameBoard[2][2] != null ){
+        if(gameBoard[0][0].equals("X") && gameBoard[1][1].equals("X") && gameBoard[2][2].equals("X") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("X Wins!");
+                return 2;
+            }// diagonal win condition
+        }// checking for null values
+
+        if(gameBoard[2][0] != null && gameBoard[1][1] != null && gameBoard[0][2] != null){
+            if(gameBoard[2][0].equals("X") && gameBoard[1][1].equals("X") && gameBoard[0][2].equals("X") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("X Wins!");
+                return 2;
+            }// diagonal win condition
+        }// checking for null values.
+
+        }//checking for X win conditions based off of current input.
+        else{
+
+            for(int i = 0; i < gameBoard.length; i++){
+            if(gameBoard[i][0] != null && gameBoard[i][1] != null && gameBoard[i][2] != null){    
+            if(gameBoard[i][0].equals("O") && gameBoard[i][1].equals("O") && gameBoard[i][2].equals("O") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("O Wins!");
+                return 2;
+            }// row win condition
+          }// loop through the rows checking for a row win for O
+        }// checking for null values first
+            
+            for(int i = 0; i < gameBoard.length; i++){
+            if(gameBoard[0][i] != null && gameBoard[1][i] != null && gameBoard[2][i] != null){    
+            if(gameBoard[0][i].equals("O") && gameBoard[1][i].equals("O") && gameBoard[2][i].equals("O") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("O Wins!");
+                return 2;
+            }// coulmn win condition
+            }// checking for null values
+          }// loop through the cloumns checking for a row win for O
+
+          if(gameBoard[0][0] != null && gameBoard[1][1] != null && gameBoard[2][2] != null){
+        if(gameBoard[0][0].equals("O") && gameBoard[1][1].equals("O") && gameBoard[2][2].equals("O") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("O Wins!");
+                return 2;
+            }// diagonal win condition
+        }// checking for null values
+
+        if(gameBoard[2][0] != null && gameBoard[1][1] != null && gameBoard[0][2] != null){
+            if(gameBoard[2][0].equals("O") && gameBoard[1][1].equals("O") && gameBoard[0][2].equals("O") ){
+                 gameBoardPrint(gameBoard);
+                System.out.println("O Wins!");
+                return 2;
+            }// diagonal win condition
+        }// checking for null values
+
+        }//checking for O win conditions based off of current input.
+    }// end if input is 2 charaters
+    else{
+        return 0;
+    }// end the input condition
+// the peice will be placed check for win condition.
 
 
+}// turns 5-9 to check for win conditions
+
+if(turnNum == 9 && turnCondition != 5){
+        System.out.println("Tie");
+        turnCondition = 2;
+}// goes into here if the turnNum is 9 and there isn't a win condition. returns 2.
 
 
    // either returns 1 (regular turn) or 2 (draw offered)
@@ -130,12 +233,12 @@ public class TicTacToe {
             if (turn) {
                 System.out.print("X's move: ");
                 String xMove = sc.nextLine();
-                validity = MakeMove(gameBoard, turn, xMove, validity);
+                validity = MakeMove(gameBoard, turn, xMove);
                 while (validity == 0) {
                     System.out.println("Illegal move, try again");
                     System.out.print("X's move: ");
                     xMove = sc.nextLine();
-                    validity = MakeMove(gameBoard, turn, xMove, validity);
+                    validity = MakeMove(gameBoard, turn, xMove);
                 }
                 turnNum = turnNum + 1;
                 turn = false;
@@ -143,14 +246,14 @@ public class TicTacToe {
             else{
                     System.out.print("O's move: ");
                     String oMove = sc.nextLine();
-                    validity = MakeMove(gameBoard, turn, oMove, validity);
+                    validity = MakeMove(gameBoard, turn, oMove);
     
                     // checks validity of move and switches turn if valid
                     while (validity == 0) {
                         System.out.println("Illegal move, try again");
                         System.out.print("O's move: ");
                         oMove = sc.nextLine();
-                        validity = MakeMove(gameBoard, turn, oMove, validity);
+                        validity = MakeMove(gameBoard, turn, oMove);
                     }
                     turnNum = turnNum +1; 
                     turn = true;
