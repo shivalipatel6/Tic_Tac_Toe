@@ -206,7 +206,8 @@ if(input.length() == 2){
 
 }// turns 5-9 to check for win conditions
 
-if(turnNum == 9 && turnCondition != 5){
+if(turnNum == 9 ){
+        gameBoardPrint(gameBoard);
         System.out.println("Tie");
         turnCondition = 2;
 }// goes into here if the turnNum is 9 and there isn't a win condition. returns 2.
